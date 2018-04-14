@@ -39,6 +39,19 @@
     <string>以文件修改时间命名文件</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="uiPushButtonGenSql">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>120</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>生成sql</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

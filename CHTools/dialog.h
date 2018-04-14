@@ -21,6 +21,8 @@ private slots:
     void on_pushButtonModTime_clicked();
 
 
+    void on_uiPushButtonGenSql_clicked();
+
 private:
     QString getNewFileNameApp(QString newfileName, int appIndex);
 private:

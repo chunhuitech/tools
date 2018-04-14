@@ -81,3 +81,40 @@ QString Dialog::getNewFileNameApp(QString newfileName, int appIndex)
 
     return newFileName;
 }
+
+void Dialog::on_uiPushButtonGenSql_clicked()
+{
+    //INSERT INTO comm_record(class_id,sort_num,title,label,relative_path,file_size,file_type,content_html,content_plain,status,modify_time,create_time) VALUES (5, 0, 'd','D','/chunhui_resource/preschool/letters/d.swf',426966,'SWF','','',0,1523283619000,1523283619000);
+    QDir dir(selDirPath);
+    QFileInfoList file_list = dir.entryInfoList(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+    for(int i=0; i<file_list.count() ;i++)
+    {
+        QFileInfo tmpFileInfo = file_list.at(i);
+        if(tmpFileInfo.isFile())
+        {
+            QString fileName = tmpFileInfo.fileName();
+            int firstExt = fileName.indexOf('.');
+            QString labelName = fileName.left (firstExt);
+
+
+//            QString file_suffix = tmpFileInfo.suffix().toUpper();
+            qint64 fileSize = tmpFileInfo.size();
+//            qDebug() << fileName;
+//            qDebug() << file_suffix;
+//            qDebug() << fileSize;
+            //26英文字母
+//            QString sql = "INSERT INTO comm_record(class_id,sort_num,title,label,relative_path,file_size,file_type,content_html,content_plain,status,modify_time,create_time)";
+//            sql += "VALUES (5, 0, '"+labelName+"','"+labelName.toUpper()+"','/chunhui_resource/preschool/letters/" + fileName + "'," + QString::number(fileSize) +",'SWF','','',0,1523287650000,1523287650000);";
+            //26英文字母 客户端
+            QString sql = "INSERT INTO record(classId,sortNum,title,label,relativePath,fileSize,fileType,contentHtml,contentPlain,status,modifyTime,createTime)";
+            sql += "VALUES (5, 0, '"+labelName+"','"+labelName.toUpper()+"','/chunhui_resource/preschool/letters/" + fileName + "'," + QString::number(fileSize) +",'SWF','','',0,1523287650,1523287650);";
+            //汉语拼音
+//            QString sql = "INSERT INTO comm_record(class_id,sort_num,title,label,relative_path,file_size,file_type,content_html,content_plain,status,modify_time,create_time)";
+//            sql += "VALUES (3, 0, '"+labelName+"','"+labelName+"','/chunhui_resource/preschool/pinyin/" + fileName + "'," + QString::number(fileSize) +",'SWF','','',0,1523287650000,1523287650000);";
+            //汉字
+//            QString sql = "INSERT INTO comm_record(class_id,sort_num,title,label,relative_path,file_size,file_type,content_html,content_plain,status,modify_time,create_time)";
+//            sql += "VALUES (4, 0, '"+labelName+"','"+labelName+"','/chunhui_resource/preschool/hanzi/" + fileName + "'," + QString::number(fileSize) +",'SWF','','',0,1523287650000,1523287650000);";
+            qDebug() << sql;
+        }
+    }
+}
