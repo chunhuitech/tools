@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QDateTime>
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
@@ -15,6 +16,32 @@ Dialog::Dialog(QWidget *parent) :
 Dialog::~Dialog()
 {
     delete ui;
+}
+
+void Dialog::Zip(QString filename, QString zipfilename)
+{
+    QFile infile(filename);
+    QFile outfile(zipfilename);
+    infile.open(QIODevice::ReadOnly);
+    outfile.open(QIODevice::WriteOnly);
+    QByteArray uncompressedData = infile.readAll();
+    QByteArray compressedData = qCompress(uncompressedData,9);
+    outfile.write(compressedData);
+    infile.close();
+    outfile.close();
+}
+
+void Dialog::Unzip(QString zipfilename, QString filename)
+{
+    QFile infile(zipfilename);
+    QFile outfile(filename);
+    infile.open(QIODevice::ReadOnly);
+    outfile.open(QIODevice::WriteOnly);
+    QByteArray uncompressedData = infile.readAll();
+    QByteArray compressedData = qUncompress(uncompressedData);
+    outfile.write(compressedData);
+    infile.close();
+    outfile.close();
 }
 
 void Dialog::on_pushButtonSelFolder_clicked()
@@ -82,6 +109,47 @@ QString Dialog::getNewFileNameApp(QString newfileName, int appIndex)
     return newFileName;
 }
 
+void Dialog::getPath1Name1Ext(QString srcFileFullName, QString &path, QString &name, QString &ext)
+{
+    int first = srcFileFullName.lastIndexOf ("/"); //从后面查找"/"位置
+    QString curFileName = srcFileFullName.right (srcFileFullName.length ()-first-1); //从右边截取
+    first = srcFileFullName.lastIndexOf (curFileName);
+    QString filePath = srcFileFullName.left(first);
+    path = filePath;
+    int firstExt = curFileName.indexOf('.');
+    QString curFileShortName = curFileName.left (firstExt);
+     name = curFileShortName;
+     ext = curFileName.right(curFileName.length() - curFileShortName.length() -1 );
+}
+
+QString Dialog::getSeleFile()
+{
+    //定义文件对话框类
+    QFileDialog *fileDialog = new QFileDialog(this);
+    //定义文件对话框标题
+    fileDialog->setWindowTitle(tr("打开文件"));
+    //设置默认文件路径
+    fileDialog->setDirectory(".");
+    //设置文件过滤器
+    fileDialog->setNameFilter(tr("dor txt(*.txt *.dor)"));
+    //设置可以选择多个文件,默认为只能选择一个文件QFileDialog::ExistingFiles
+    fileDialog->setFileMode(QFileDialog::ExistingFiles);
+    //设置视图模式
+    fileDialog->setViewMode(QFileDialog::Detail);
+    //打印所有选择的文件的路径
+    QStringList fileNames;
+    if(fileDialog->exec())
+    {
+        fileNames = fileDialog->selectedFiles();
+    }
+//    for(auto tmp:fileNames)
+//        qDebug()<<tmp<<endl;
+    if(fileNames.length() > 0){
+        return fileNames.at(0);
+    }
+    return "";
+}
+
 void Dialog::on_uiPushButtonGenSql_clicked()
 {
     //INSERT INTO comm_record(class_id,sort_num,title,label,relative_path,file_size,file_type,content_html,content_plain,status,modify_time,create_time) VALUES (5, 0, 'd','D','/chunhui_resource/preschool/letters/d.swf',426966,'SWF','','',0,1523283619000,1523283619000);
@@ -117,4 +185,23 @@ void Dialog::on_uiPushButtonGenSql_clicked()
             qDebug() << sql;
         }
     }
+}
+
+
+void Dialog::on_uiPushButtonPress_clicked()
+{
+    unPressFileName = getSeleFile();
+    QString path, name, ext;
+    getPath1Name1Ext(unPressFileName, path, name, ext);
+    pressFileName = path + name + ".dor";
+    Zip(unPressFileName,pressFileName);
+}
+
+void Dialog::on_uiPushButtonUnPress_clicked()
+{
+    pressFileName =  getSeleFile();
+    QString path, name, ext;
+    getPath1Name1Ext(pressFileName, path, name, ext);
+    unPressFileName = path + name + ".txt";
+    Unzip(pressFileName,unPressFileName);
 }

@@ -52,6 +52,32 @@
     <string>生成sql</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="uiPushButtonPress">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>170</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>压缩</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="uiPushButtonUnPress">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>210</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>解缩</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
